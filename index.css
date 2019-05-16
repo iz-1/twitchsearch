@@ -1,31 +1,63 @@
-{border: 1px solid gray;} 
-
+/** { border: 1px solid gray; } */
 body {
     text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: calc(10px + (20 - 10) * ((100vw - 360px) / (1560)));
     margin: 0;
+    border-radius: 2px;
 }
-div {
-    display: inline-block;
-    height: 100%;
-    /*width: 25%; */
+.game {
+    position: absolute;
+    background-color: #19171C;
+    height: 200px;
+    padding: 2px 2px 0 2px;;
+    width: 22%;
+}
+.game label {
+    color: #fff;
+}
+.critera {
+    height: 200px;
+    margin-left: 23%;
+    width: 74%;
+}
+fieldset {
+    margin: 2px 0 2px;
+    border-radius: 4px;
+    height: 100px;
+    width: 74%;
+    overflow: visible;
+}
+.mtitle {
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 2vh;
-    vertical-align: center;
 }
-/*
-div:nth-child(2) {
-    width: 70%;
-    text-align: left;
-    margin-bottom: 50px;
-    padding: 1em 0;
-    float: right;
-}*/
+.title {
+    overflow-wrap: break-word;
+    font-weight: bold;
+    font-size: 1em;    
+}
+.title a:link, a:visited {
+    color: #000;
+}
+.title a:link:hover {
+    text-decoration: underline;
+    color: rgb(100, 65, 164);
+}
+.username {
+    font-size: 0.9em;
+}
+.sort {
+    position: absolute;
+    display: block;
+    height: 50px;
+    padding: 2px 0;
+    margin: 0 2px 0 65%;
+}
+a:link {
+    text-decoration: none;
+}
 form {
-    width: 50vw;
-    /*display: grid;    */
     margin-left: auto;
     margin-right: auto;
 }
@@ -36,25 +68,23 @@ form {
     display: none;
 }
 input {
-    border-radius: 2px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0.25em auto;
     text-align: center;    
     display: inline;
+    border-radius: 0.25em;
+    border: 1px solid grey;
 }
 label {
-    /* float: left; */
-    margin: 1vh 0;
     width: 30%;
     border-radius: 2px;
+    font-weight: bold;
 }
 li {
     display: block;
-    border: 1px solid gray;
     border-radius: 4px;
     margin-bottom: 1vh;
-    width: 100%;
     vertical-align: top;
+    width: 480px;
 }
 #numresults {
     grid-column: 2 / 3;
@@ -66,6 +96,7 @@ p {
     display: block;
     overflow-wrap: break-word;
     text-align: left;    
+    margin: 1px;
 }
 section {
     margin: 0 auto;
@@ -73,22 +104,39 @@ section {
 select {
     display: inline-block;
     border-radius: 2px;
-    /*margin-left: auto;*/
     margin-left: 2vw;
     margin-right: auto;    
     min-width: 40px;
     text-align: center;
-    width: 10vw;
+    width: 93px;
+    height: 30px;
+    padding: 0 8px 0 10px;
 }
 input[type=submit] {
     width: 4vw;
     margin-top: 2vw;
     min-width: 60px;
 }
+input[type=button]{
+    background-color: rgb(100, 65, 164);
+    color: #fff;
+    padding: 0 5px;
+    height: 30px;
+    width: 96px;
+}
+input[type=button]:hover:enabled {
+    background-color: #AC9ACE;
+    transition: 200ms;
+}
+input[type=checkbox] {
+    display: none;
+}
 text {
     width: 50vw;
 }
-
+legend {
+    padding: 5px;
+}
 .hide {
     visibility: hidden;
     height: 0;
@@ -97,7 +145,6 @@ text {
     margin-top: 2vh;
 }
 hr {
-    /* visibility: hidden; */
     color: rgb(100, 65, 164);
     width: 100%;
 }
@@ -106,7 +153,7 @@ hr {
 }
 .checkbox-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 option {
     margin: 2px;
@@ -115,37 +162,44 @@ image {
     float: left;
 }
 .channels {
-    border: 2px solid  red;
+    background-color: red;
 }
 .games {
-    border: 2px solid blue;
+    background-color: blue;
+}
+.channels, .games {
+    padding: 5px;
+    border-radius: 4px;
+    margin: 0 5px 20px;
+    color: #fff;
 }
 h1 {
     text-align: top;    
 }
 nav {
-    /* float: right; */
-    padding-top: 1vh;
-    height: 5vh;
+    padding-top: 0.1em;
 }
 h1, nav {
     display: inline-block;
     vertical-align: center;
 }
+h2 {
+    margin-top: 0.5em;
+}
 header {
     display: flex;
     justify-content: right;
     background-color: rgb(100, 65, 164);
-    margin: 0 0 2vh 0;
     color: #fff;
+    height: 3.128em;
 }
 header a {
     color: #fff;
-    margin-right: 1vw;
+    margin-right: 0.25em;
 }
 .accountInput {
-    width: 50px;
-    margin-right: 5px;
+    width: 5em;
+    margin-right: 0.25em;
 }
 .modal {
     display: none;
@@ -170,7 +224,6 @@ header a {
 }
 div p {
     display: inline-block;
-    /* width: 50%; */
     vertical-align: top;
 }
 span {
@@ -181,10 +234,83 @@ span {
 img, article {
     display: inline-block;
 }
+img {
+    border-radius: 0.25em;
+}
 .resultitem {
-    width: 50%;
     vertical-align: top;
 }
 i {
     margin: 0 2px;
+}
+ol {
+    padding: 0;
+    margin: 0 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.content-list {
+    text-align: left;
+    padding: 0;
+    padding-top: 12px;
+    margin-top: 0;
+    margin-bottom: 2px;
+}
+.content-list li {
+    display: inline;
+    padding: 0 1px;
+}
+.content-list li:nth-child(6) {
+    padding-left: 50%;
+}
+.content-list label {
+    padding: 10px 5px;
+}
+input[type=radio] {
+    display: none;
+}
+.content-list .navitem:hover{
+    padding-bottom: 10px;
+    border-bottom: 4px solid darkgray;
+}
+.clist-active {
+    padding-bottom: 10px;
+    border-bottom: 4px solid rgb(100, 65, 164);
+}
+div .vl {    
+    height: 100%;
+    border-left: 1px solid black;
+    border-radius: 0;
+    padding: 10px 0;
+}
+#searchresult-list {
+    width: 90%;
+    margin-left: 5px;
+}
+.iteminfo {
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    border-radius: 4px;
+    cursor: pointer;
+}
+.iteminfo p {
+    background-color: #000;
+    background-color: rgba(0,0,0,0.8);
+}
+p.views, p.date{
+    align-self: flex-end;
+    padding: 2px;
+}
+.fa-play {
+    align-self: center;
+    color: rgba(255,255,255,0.2);
+}
+.iteminfo:hover .fa-play {
+    color: #fff;
+    transition: 200ms;
 }

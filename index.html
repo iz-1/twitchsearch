@@ -8,50 +8,73 @@
         <link rel="stylesheet" href="index.css">
         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' integrity='sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf' crossorigin='anonymous'>
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <!-- <script src= "https://player.twitch.tv/js/embed/v1.js"></script> -->
+        <script src="https://embed.twitch.tv/embed/v1.js"></script>
     </head>
     <body>
         <header>
-            <div class="title"><h1>Twitch Content Search</h1></div>
+            <div class="mtitle">
+                <h2>Twitch Content Search</h2>
+            </div>
             <nav>
                 <a href="#" id="faveLink" class="hidden">Favorites</a> <a href="#" id="logoutLink" class="hidden">Logout</a> <a href="#" id="deleteLink" class="hidden">Delete Account</a>
                 <a href="#" id="loginLink">Login</a><a href="#" id="regLink">Register</a><br>
                 <input type="text" id="login" class="accountInput" value='username'><input type="password" id="pass" class="accountInput">
             </nav>
         </header>
+
         <form>            
             <!-- <input type="text" id="streamer" value="Streamer" pattern=".{2,}" title="3 characters min"> -->     
             <!-- <div class="number"><label for="number-results">Max Results</label><select id="number-results"></select></div> -->
             <div class="game">
                 
-                <label for="content-type">Look Up</label><select id="content-type" class="hidden"></select> <!--todo remove content-type dropdown -->
+                <!-- <label for="content-type">Look Up</label><br> -->
+                <select id="content-type" class="hidden"></select> <!--todo remove content-type dropdown -->
+
+                
+
+                <input type="text" id="search" value="Search Term"><br>
 
                 <input type="button" id="ChannelBtn" value="Channels">
-
-                <input type="text" id="search" value="" pattern=".{2,}" title="3 characters min"> 
+                <!--<input type="text" id="search" value="" pattern=".{2,}" title="3 characters min"> -->
                 <!-- <input type="submit" value="Search"> -->
                 <input type="button" id="SearchBtn" value="Games">
 
                 <hr>
 
-                <label for="searchresult-list">Search Results</label><select id="searchresult-list"></select>
+                <select id="searchresult-list"></select><br>
                 <input type="button" id="addBtn" value="Add">
             </div>
 
             <div class="critera">
-                <label for="find-type">Find Content</label><select id="find-type"></select>
-                <label for="sort-type">Sort By</label><select id="sort-type"></select>
-                <input type="button" id="FindBtn" value="Find">
-                <hr>
+                <!-- <label for="find-type">Showing</label><select id="find-type"></select> -->
+                <ul class="content-list">
+                        <li class="navitem"><label><input type="radio" name="content" value="videos" checked>Videos</label></li>
+                        <li class="vl"></li>
+                        <li><label class="navitem"><input type="radio" name="content" value="clips">Clips</label></li>
+                        <li class="vl"></li>
+                        <li><label class="navitem"><input type="radio" name="content" value="streams">Streams</label></li>
+                        <li><label for="sort-type">Sort</label><select id="sort-type"></select></li>
+                </ul>
+
+                <fieldset><legend><input type="button" id="FindBtn" value="Search"></legend>
                 <section id='checkbox-container'></section>
+                </fieldset>
+
+                <!-- <hr> -->
+
+                <div class="sort">
+                    
+                    <label for="filter-date">Filter</label><select id="filter-date"></select>
+                </div>
             </div>
 
-            <hr>
+            <!-- <hr> -->
 
+        <!--
             <div class="sort">
-                <label for="filter-date">Filter Upload Date</label><select id="filter-date"></select>                
+                <label for="filter-date">Filter Upload Date</label><select id="filter-date"></select>
             </div>
-            
+        -->
         </form>
         <section class="results hidden">
             <h2>Search Results</h2>

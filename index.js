@@ -17,6 +17,9 @@ let currSearchParams = {};
 let prevRequest;
 //let cursor = '';
 
+const imgw = 480;
+const imgh = 272;
+
 const ResponseFunction = {
     games: ParseGameListSearch
     ,clips: DisplayResultClips
@@ -44,24 +47,54 @@ function startForm(){
         $('.modal').css('display', 'none');
     });
     
-    $('#result-list').on('click', 'i', function(event){        
-        //console.log('clicked ' + $(event.currentTarget));
-        if($(event.currentTarget).hasClass('fa-link')) {            
+    $('#result-list').on('click', 'i', 'div', function(event){        
+        let t = $(event.currentTarget);
+        console.log('clicked ' + t);
+
+        if(t.hasClass('iteminfo'))
+        {
+            let p = t.parent();
+            t.empty();
+
+
+            switch(p.attr('type'))
+            {
+                case 'clips':
+                    t.append(GetEmbedStr(p.attr('src') + p.attr('vid')));
+                break;
+                case 'videos':
+                    LoadTwitchPlayer(p.attr('vid'), t.attr('id'));   
+                break;
+                case 'streams':
+                    LoadTwitchPlayer(p.attr('uname'), t.attr('id'), false);   
+                break;
+            }
+
+            console.log('check src:' + p.attr('src') == null);
+
+            /*
+            if(p.attr('src') == '')
+               LoadTwitchPlayer(p.attr('vid'), t.attr('id'));
+            else
+                t.append(GetEmbedStr(p.attr('src') + p.attr('vid')));
+                */
+        }
+        else if(t.hasClass('fa-link')) {            
             let jObj = $(event.currentTarget);
             CopyToClipboard(jObj);
         }
         else {
             // far
-            let adding = $(event.currentTarget).hasClass('far');
-            let id = $(event.currentTarget).attr('value');
+            let adding = t.hasClass('far');
+            let id = t.attr('value');
             
-            console.log($(event.currentTarget));
+            console.log(t);
 
             if(AddRemVideoIDtoFavorite(id, adding))
             {
                 // fas fa-star
-                $(event.currentTarget).toggleClass('far');
-                $(event.currentTarget).toggleClass('fas');
+                t.toggleClass('far');
+                t.toggleClass('fas');
             }
         }
     });
@@ -107,8 +140,9 @@ function startForm(){
         ClearResults();
         //FindContentChange();
 
-        currContent = $('#find-type :selected').val();
-        //console.log(currContent);
+        //currContent = $('#find-type :selected').val();
+        currContent = $('input[name=content]:checked').val();
+        console.log(currContent);
         $('section .results').addClass('hidden'); 
         const params = GetParams(currContent); 
         prevRequest = BuildQueryRequest(currContent, params, 200);
@@ -131,9 +165,13 @@ function startForm(){
         */
     });
 
-    $('form').on('change', '[type=checkbox]', function(event){
-        $(event.currentTarget).prev('label').remove();
-        event.currentTarget.remove();
+    //$('form').on('click', 'label', function(event){
+    $('#checkbox-container').on('click', 'label', function(event){
+        let t = $(event.currentTarget);
+        if(t.hasClass('games') || t.hasClass('channels')) {
+            $(event.currentTarget).next('input').remove();
+            event.currentTarget.remove();
+        }
     });
 
     $('form').on('change', '#filter-date', function(event){
@@ -161,11 +199,22 @@ function startForm(){
 
     });
 
+    $('.content-list').on('change', 'input', function(event){
+            $('.content-list input').each(function(){
+                let t = $(this);
+                t.prop('checked') ? t.parent().addClass('clist-active') : t.parent().removeClass('clist-active');
+            });
+    });
+
     /*
     $('#find-type').on('change', function(){        
         FindContentChange();
     });
     */
+}
+
+function GetDays(val){
+    return ((new Date() - new Date(val)) / (1000 * 60 * 60 * 24)).toFixed(0);
 }
 
 // handled in GetParams - store these criteria for filtering data after retrival
@@ -224,15 +273,22 @@ function ShowModal(text){
 
 function PopulateDropdowns() {
     BuildNumResultsOptions();
-    PopulateSelectOptions('#find-type', 'clips,videos,streams'.split(','));
+    //PopulateSelectOptions('#find-type', 'clips,videos,streams'.split(','));
     PopulateSelectOptions('#content-type', 'games,channels'.split(','));
     //Request('https://api.twitch.tv/helix/games/top', StoreTopGames); // find top games
     PopulateSelectOptions('#filter-date', 'all,day,week,month'.split(','));
     PopulateSelectOptions('#sort-type', 'time,trending,views'.split(','));
+    PopulateDummySearchList();
 }
 
 function AddSearchOption(text, val, type) {
     $('#checkbox-container').append(`<label class='${type}'>${text}</label><input type='checkbox' value='${val}' data-type='${type}' class='searchcriteria'>`);
+}
+
+function PopulateDummySearchList() {
+    PopulateSelectOptions('#searchresult-list', [''], ['Search Results']); 
+    $('#searchresult-list').prop('disabled', true);
+    $('#addBtn').prop('disabled', true);
 }
 
 function ParseChannelSearch(response){
@@ -243,7 +299,9 @@ function ParseChannelSearch(response){
         names.push(e.display_name);
         ids.push(e._id);
     });
-    PopulateSelectOptions('#searchresult-list', ids, names);    
+    PopulateSelectOptions('#searchresult-list', ids, names); 
+    $('#searchresult-list').prop('disabled', false);
+    $('#addBtn').prop('disabled', false);
 }
 
 function ParseGameListSearch(response){
@@ -255,6 +313,8 @@ function ParseGameListSearch(response){
         ids.push(e._id);
     });
     PopulateSelectOptions('#searchresult-list', ids, names);
+    $('#searchresult-list').prop('disabled', false);
+    $('#addBtn').prop('disabled', false);
 }
 
 function PopulateSelectOptions(id, valueList, textList = valueList) {
@@ -472,7 +532,8 @@ function DisplayResultClips(response){
     //let playerName = "SamplePlayerDivID";
     //let table = {};
 
-    let searchContent = $('#find-type :selected').val();
+    //let searchContent = $('#find-type :selected').val();
+    let searchContent = $('input[name=content]:checked').val();
 
     //let cursor = "";
 
@@ -484,9 +545,6 @@ function DisplayResultClips(response){
         let url = (searchContent == 'streams') ? 'www.twitch.tv/' + name :  item.url;
         let favoritelink = isLoggedIn() ? `<i class='${ isContentFavorited(item.id) ? 'fas' : 'far'} fa-star' value='${item.id}'></i>` : '';
         
-        const imgw = 480;
-        const imgh = 272;
-
         let imgurl = item.thumbnail_url.replace('%{width}', '{width}').replace('%{height}', '{height}'); // todo regex/replace('%{') for all
         imgurl = imgurl.replace('{width}', imgw).replace('{height}', imgh);
 
@@ -499,20 +557,46 @@ function DisplayResultClips(response){
         let matchesGame = item.hasOwnProperty('game_id') ? ContentMatchesGame(item.game_id) : false;
 
         // streams has no view_count/created_at
-        let viewsProp = item.hasOwnProperty('view_count') ? 'view_count' : 'viewer_count';
-        let viewTitle = ProperCase(viewsProp.replace('_', ' '));
+        let viewsProp = 'view_count';
+        let viewTitle = 'views';
+
+        if(item.hasOwnProperty('viewer_count'))
+        {
+            viewsProp = 'viewer_count';
+            viewTitle = 'viewers';
+        }
+
         let dateProp = item.hasOwnProperty('created_at') ? 'created_at' : 'started_at';
         let dateTitle = ProperCase(dateProp.replace('_', ' '));
+
+        console.log('mode: ' + searchContent);
+        let srcUrl = (searchContent == 'clips') ? 'https://clips.twitch.tv/embed?clip=': '';//'https://player.twitch.tv/?video=';
 
         if( (searchContent != 'videos' && matchesUser && matchesGame ) ||  // streams/clips
             matchesUser ) // videos
             {
+                let divID = 'iteminfo' + resultEntries.length; // used for twitch player
+
+                resultEntries.push(
+                    `<li vid='${item.id}' src='${srcUrl}' uname='${name}' type='${searchContent}'><div class='iteminfo' id=${divID} style="height:${imgh}px; width:${imgw}px; background-image: url('${imgurl}')">\                    
+                    <p class='views' value='${item[viewsProp]}'>${item[viewsProp]} ${viewTitle}</p>\
+                    <i class="fas fa-play fa-3x"></i>\
+                    <p class='date' value='${item[dateProp]}'>${GetDays(item[dateProp])} Days</p>\
+                    </div>\                    
+                    <div class='resultitem'>\                    
+                    <p class='title'><a href='${url}' target='_blank'>${item.title}</a></p><br>\
+                    <p>${favoritelink}<i class='fas fa-link'></i></p><p class='username'>${name}</p><br>\
+                    </div></li>`);
+                /*                
+                <p class='date' value='${item[dateProp]}'>${dateTitle}: ${item[dateProp]}</p>\
+
                 resultEntries.push(
                     `<li><img src='${imgurl}'>\
-                    <div class='resultitem'><p class='title'>${name} - ${item.title}</p><br>\
+                    <div class='resultitem'><p class='title'>${item.title}<br>${name}</p><br>\
                     <p>${favoritelink}<i class='fas fa-link'></i><a href='${url}' target='_blank'>${url}</a></p><br>\                        
                     <p class='views' value='${item[viewsProp]}'>${viewTitle}: ${item[viewsProp]}</p><br>\
                     <p class='date' value='${item[dateProp]}'>${dateTitle}: ${item[dateProp]}</p></div></li>`);
+                */
             }
 
     });
@@ -532,6 +616,49 @@ function DisplayResultClips(response){
     */
 
     $('section').removeClass('hidden');    
+}
+
+function GetEmbedStr(src, bClip=false, w=imgw, h=imgh, bFullScreen=true, bScrolling=false, border=0){
+    console.log('called GetEmbedStr');
+    return `<iframe
+    src="${src}&autoplay=false"
+    height="${h}"
+    width="${w}"
+    frameborder="${border}"
+    scrolling="${bScrolling}"
+    allowfullscreen="${bFullScreen}">
+    </iframe>`;
+}
+
+function LoadTwitchPlayer(srcID, divId, bIsVideo=true) {
+    console.log('called LoadTwitchPlayer, is video?' + bIsVideo);
+    let embed;
+
+    if(bIsVideo) {
+        embed = new Twitch.Embed(divId, {
+            width: imgw,
+            height: imgh,
+            layout: "video",
+            autoplay: true,
+            muted: false,
+            video: srcID        
+        });
+    }
+    else {
+        embed = new Twitch.Embed(divId, {
+            width: imgw,
+            height: imgh,
+            layout: "video",
+            autoplay: true,
+            muted: false,
+            channel: srcID        
+        });
+    }
+
+    embed.addEventListener(Twitch.Embed.VIDEO_READY, () => {
+        let player = embed.getPlayer();
+        player.play();
+    });
 }
 
 function isValidLoginCredentials(){
