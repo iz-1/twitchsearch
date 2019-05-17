@@ -154,35 +154,7 @@ function startForm(){
     });
 
     $('#SearchBtn').on('click', function(){
-        ClearResults();
-        //FindContentChange();
-
-        //currContent = $('#find-type :selected').val();
-        currContent = $('input[name=content]:checked').val();
-        //console.log(currContent);
-        $('section .results').addClass('hidden'); 
-        currSearchParams = GetParams(currContent); 
-
-        if(!currSearchParams.hasOwnProperty('game_id') && 
-            !currSearchParams.hasOwnProperty('user_id') )
-            return;
-
-        console.log(JSON.stringify(currSearchParams));
-
-        RequestRes(BuildQueryRequest(currContent, currSearchParams, 200), currSearchParams, ResponseFunction[currContent]); 
-
-        $('#filter-date').val('all');
-
-        /*
-        console.log(cursor);
-
-        if(cursor != '' || (prevSearchParams != null && prevSearchParams.cursor != cursor))
-        {
-            prevSearchParams = params;
-            prevSearchParams['cursor'] = cursor;
-            cursor = '';
-            RequestRes(BuildQueryRequest(currSearch, prevSearchParams, nRes), ResponseFunction[currSearch]); 
-        }*/
+        SearchButton();
     });
 
     $('#checkbox-container').on('click', 'label', function(event){
@@ -234,13 +206,32 @@ function startForm(){
                 let t = $(this);
                 t.prop('checked') ? t.parent().addClass('clist-active') : t.parent().removeClass('clist-active');
             });
+            SearchButton();
     });
 
-    /*
-    $('#find-type').on('change', function(){        
-        FindContentChange();
+    $('#sort-type').on('change', function(){        
+        SearchButton();
     });
-    */
+}
+
+function SearchButton() {
+    if($('input:checkbox').length == 0)
+    return;
+
+    ClearResults();
+    //FindContentChange();
+
+    //currContent = $('#find-type :selected').val();
+    currContent = $('input[name=content]:checked').val();
+
+    console.log($('input:checkbox').length);
+
+    $('section .results').addClass('hidden'); 
+    currSearchParams = GetParams(currContent); 
+
+    RequestRes(BuildQueryRequest(currContent, currSearchParams, 200), currSearchParams, ResponseFunction[currContent]); 
+
+    $('#filter-date').val('all');    
 }
 
 function GetDaysStr(dat){
