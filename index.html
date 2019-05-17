@@ -21,71 +21,37 @@
                 <input type="text" id="login" class="accountInput" value='username'><input type="password" id="pass" class="accountInput">
             </nav>
         </header>
-
         <form>            
-            <!-- <input type="text" id="streamer" value="Streamer" pattern=".{2,}" title="3 characters min"> -->     
-            <!-- <div class="number"><label for="number-results">Max Results</label><select id="number-results"></select></div> -->
             <div class="game">
-                
-                <!-- <label for="content-type">Look Up</label><br> -->
                 <select id="content-type" class="hidden"></select> <!--todo remove content-type dropdown -->
-
-                
-
                 <input type="text" id="search" value="Search Term"><br>
-
                 <input type="button" id="ChannelBtn" value="Channels">
                 <!--<input type="text" id="search" value="" pattern=".{2,}" title="3 characters min"> -->
-                <!-- <input type="submit" value="Search"> -->
-                <input type="button" id="SearchBtn" value="Games">
-
+                <input type="button" id="GamesBtn" value="Games">
                 <hr>
-
                 <select id="searchresult-list"></select><br>
                 <input type="button" id="addBtn" value="Add">
             </div>
-
             <div class="critera">
-                <!-- <label for="find-type">Showing</label><select id="find-type"></select> -->
                 <ul class="content-list">
-                        <li class="navitem"><label><input type="radio" name="content" value="videos" checked>Videos</label></li>
+                        <li class="navitem"><label class="clist-active"><input type="radio" name="content" value="videos" checked>Videos</label></li>
                         <li class="vl"></li>
                         <li><label class="navitem"><input type="radio" name="content" value="clips">Clips</label></li>
                         <li class="vl"></li>
                         <li><label class="navitem"><input type="radio" name="content" value="streams">Streams</label></li>
                         <li><label for="sort-type">Sort</label><select id="sort-type"></select></li>
                 </ul>
-
-                <fieldset><legend><input type="button" id="FindBtn" value="Search"></legend>
+                <fieldset><legend><input type="button" id="SearchBtn" value="Search"></legend>
                 <section id='checkbox-container'></section>
                 </fieldset>
-
-                <!-- <hr> -->
-
                 <div class="sort">
-                    
                     <label for="filter-date">Filter</label><select id="filter-date"></select>
                 </div>
             </div>
-
-            <!-- <hr> -->
-
-        <!--
-            <div class="sort">
-                <label for="filter-date">Filter Upload Date</label><select id="filter-date"></select>
-            </div>
-        -->
         </form>
         <section class="results hidden">
             <h2>Search Results</h2>
-            <ol id="result-list">
-                <!--
-                    <li>
-                        <div><p class='repoTitle'>test</p><p><a href='www' target='_'>www</a></p></div>
-                        <div>Desc</div>
-                    </li> 
-                -->
-            </ol>
+            <ol id="result-list"></ol>
         </section>
         <div class="modal"><div class="modalcontent"><p></p><span>&times;</span></div></div>
     </body>

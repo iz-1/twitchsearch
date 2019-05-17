@@ -1,4 +1,4 @@
-/** { border: 1px solid gray; } */
+/** { border: 1px solid gray; }*/
 body {
     text-align: center;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -11,22 +11,24 @@ body {
     background-color: #19171C;
     height: 200px;
     padding: 2px 2px 0 2px;;
-    width: 22%;
+    width: 30vw;
 }
 .game label {
     color: #fff;
 }
 .critera {
     height: 200px;
-    margin-left: 23%;
+    margin-left: 30vw;
     width: 74%;
+    max-width: 2500px;
+    padding-left: 0.5vw;
 }
 fieldset {
-    margin: 2px 0 2px;
     border-radius: 4px;
     height: 100px;
-    width: 74%;
+    width: 65.5vw;
     overflow: visible;
+    max-width: 1500px;
 }
 .mtitle {
     margin-left: auto;
@@ -35,7 +37,8 @@ fieldset {
 .title {
     overflow-wrap: break-word;
     font-weight: bold;
-    font-size: 1em;    
+    /*font-size: 1em;*/
+    font-size: calc(12px + (20 - 12) * ((100vw - 360px) / (1560)));
 }
 .title a:link, a:visited {
     color: #000;
@@ -45,14 +48,13 @@ fieldset {
     color: rgb(100, 65, 164);
 }
 .username {
-    font-size: 0.9em;
+    /*font-size: 0.9em;*/
+    font-size: calc(11px + (20 - 11) * ((100vw - 360px) / (1560)));
 }
 .sort {
-    position: absolute;
-    display: block;
-    height: 50px;
-    padding: 2px 0;
-    margin: 0 2px 0 65%;
+    float: right;
+    margin-right: 32vw;
+    margin-top: 0.5vh;
 }
 a:link {
     text-decoration: none;
@@ -60,6 +62,7 @@ a:link {
 form {
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 1.5vw;
 }
 .gladr {
     text-decoration: none;
@@ -73,6 +76,8 @@ input {
     display: inline;
     border-radius: 0.25em;
     border: 1px solid grey;
+    width: 24vw;
+    max-width: 150px;
 }
 label {
     width: 30%;
@@ -84,7 +89,7 @@ li {
     border-radius: 4px;
     margin-bottom: 1vh;
     vertical-align: top;
-    width: 480px;
+    /* width: 480px; */
 }
 #numresults {
     grid-column: 2 / 3;
@@ -104,25 +109,22 @@ section {
 select {
     display: inline-block;
     border-radius: 2px;
-    margin-left: 2vw;
+    margin-left: 5px;
     margin-right: auto;    
-    min-width: 40px;
+    max-width: 90px;
     text-align: center;
-    width: 93px;
-    height: 30px;
+    width: 24vw;
+    height: 3vh;
     padding: 0 8px 0 10px;
-}
-input[type=submit] {
-    width: 4vw;
-    margin-top: 2vw;
-    min-width: 60px;
+    min-height: 20px;
+    max-height: 30px;
+    max-width: 100px;
 }
 input[type=button]{
     background-color: rgb(100, 65, 164);
     color: #fff;
     padding: 0 5px;
     height: 30px;
-    width: 96px;
 }
 input[type=button]:hover:enabled {
     background-color: #AC9ACE;
@@ -141,15 +143,12 @@ legend {
     visibility: hidden;
     height: 0;
 }
-.sort {
-    margin-top: 2vh;
-}
 hr {
     color: rgb(100, 65, 164);
     width: 100%;
 }
 .critera {
-    width: 100%
+    width: 100%;
 }
 .checkbox-container {
     display: flex;
@@ -172,26 +171,34 @@ image {
     border-radius: 4px;
     margin: 0 5px 20px;
     color: #fff;
+    max-width: 800px;
 }
 h1 {
     text-align: top;    
 }
 nav {
     padding-top: 0.1em;
+    margin-right: 3vw;
+    /* font-size: 1.0em; */
+    font-size: calc(12px + (20 - 12) * ((100vw - 360px) / (1560)));
+}
+nav a:link, nav a:visited {
+    color: #fff;    
 }
 h1, nav {
     display: inline-block;
     vertical-align: center;
 }
 h2 {
-    margin-top: 0.5em;
+    margin-top: 0.4em;
 }
 header {
     display: flex;
     justify-content: right;
     background-color: rgb(100, 65, 164);
     color: #fff;
-    height: 3.128em;
+    height: 4em;
+    max-height: 50px;
 }
 header a {
     color: #fff;
@@ -245,10 +252,10 @@ i {
 }
 ol {
     padding: 0;
-    margin: 0 5px;
+    margin: 0 0.2em;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 .content-list {
     text-align: left;
@@ -262,7 +269,9 @@ ol {
     padding: 0 1px;
 }
 .content-list li:nth-child(6) {
-    padding-left: 50%;
+    float: right;
+    margin-right: 32vw;
+    width: auto;
 }
 .content-list label {
     padding: 10px 5px;
@@ -285,8 +294,9 @@ div .vl {
     padding: 10px 0;
 }
 #searchresult-list {
-    width: 90%;
-    margin-left: 5px;
+    margin-bottom: 0.25em;
+    margin-left: 0;
+    max-width: none;
 }
 .iteminfo {
     background-repeat: no-repeat;
@@ -295,7 +305,7 @@ div .vl {
     display: flex;
     align-items: center;
     justify-content: space-between; 
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
 }
 .iteminfo p {
@@ -305,6 +315,7 @@ div .vl {
 p.views, p.date{
     align-self: flex-end;
     padding: 2px;
+    font-size: calc(12px + (20 - 12) * ((100vw - 360px) / (1560)));
 }
 .fa-play {
     align-self: center;
