@@ -1,11 +1,13 @@
 /** { border: 1px solid gray; }*/
+html, body {
+    overflow-x: hidden;
+}
 body {
     text-align: center;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: calc(10px + (20 - 10) * ((100vw - 360px) / (1560)));
     margin: 0;
-    border-radius: 2px;
-    overflow-x: hidden;
+    border-radius: 2px;    
 }
 .game {
     position: absolute;
