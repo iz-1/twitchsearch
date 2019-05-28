@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,42 +16,36 @@
                 <h2>Twitch Content Search</h2>
             </div>
             <nav>
-                <a href="#" id="faveLink" class="hidden">Favorites</a> <a href="#" id="logoutLink" class="hidden">Logout</a> <a href="#" id="deleteLink" class="hidden">Delete Account</a>
-                <a href="#" id="loginLink">Login</a><a href="#" id="regLink">Register</a><br>
-                <input type="text" id="login" class="accountInput" placeholder='username'><input type="password" id="pass" class="accountInput">
+                <a href="#" id="faveLink" class="hidden" alt="Goto Favorites" aria-label="Goto Favorites">Favorites</a> <a href="#" id="logoutLink" class="hidden" alt="Log out" aria-label="Log out">Logout</a> 
+                <a href="#" id="deleteLink" class="hidden" alt="Delete account" aria-label="Delete account">Delete Account</a>
+                <a href="#" id="loginLink" alt="Log in" aria-label="Log in">Login</a><a href="#" id="regLink" alt="Register account" aria-label="Register account">Register</a><br>
+                <input type="text" id="login" class="accountInput" placeholder='username' ><input type="password" id="pass" class="accountInput">
             </nav>
         </header>
         <form>            
             <div class="left">
                 <div class="game">
-                    <select id="content-type" class="hidden"></select> <!--todo remove content-type dropdown -->
+                    <select id="content-type" class="hidden"></select> 
                     <input type="text" id="search" placeholder="Search for Game or User" autofocus><br>
-                    <!-- <input type="button" id="GamesBtn" value="Find Games"> -->
-                    <button id="GamesBtn">Find Games<i class="fas fa-arrow-circle-down"></i></button>
-                    <!-- <input type="button" id="ChannelBtn" value="Find Users"> -->
-                    <button id="ChannelBtn">Find Users<i class="fas fa-arrow-circle-down"></i></button>
-                    <!--<input type="text" id="search" value="" pattern=".{2,}" title="3 characters min"> -->
-                    
-                    <!--<hr>-->
+                    <button id="GamesBtn" aria-label="Find Games">Find Games<i class="fas fa-arrow-circle-down"></i></button>
+                    <button id="ChannelBtn" aria-label="Find Users">Find Users<i class="fas fa-arrow-circle-down"></i></button>
                 </div>
                 <div class="addterm">
                     <select id="searchresult-list"></select>
-                    <!-- <input type="button" id="addBtn" value="Add ->"> -->
-                    <button id="addBtn">Add<i class="fas fa-arrow-circle-right"></i></button>
+                    <button id="addBtn" aria-label="Add Selected Item">Add<i class="fas fa-arrow-circle-right"></i></button>
                 </div>
             </div>
             <div class="critera">
                 <ul class="content-list">
-                        <li class="navitem"><label class="clist-active"><input type="radio" name="content" value="videos" checked>Videos</label></li>
+                        <li class="navitem"><label class="clist-active"><input type="radio" name="content" value="videos" aria-label="Search Videos" checked>Videos</label></li>
                         <li class="vl"></li>
-                        <li><label class="navitem"><input type="radio" name="content" value="clips">Clips</label></li>
+                        <li><label class="navitem"><input type="radio" name="content" value="clips" aria-label="Search Clips">Clips</label></li>
                         <li class="vl"></li>
-                        <li><label class="navitem"><input type="radio" name="content" value="streams">Streams</label></li>
+                        <li><label class="navitem"><input type="radio" name="content" value="streams" aria-label="Search Streams">Streams</label></li>
                         <li><label for="sort-type">Sort</label><select id="sort-type"></select></li>
                 </ul>
                 <fieldset><legend>
-                    <!--<input type="button" id="SearchBtn" value="Search">-->
-                    <button id="SearchBtn">Search <i class="fas fa-search"></i></button>
+                    <button id="SearchBtn" aria-label="Search Content">Search <i class="fas fa-search"></i></button>
                 </legend>
                 <section id='checkbox-container'></section>
                 </fieldset>
@@ -64,7 +58,7 @@
             <h2>Search Results</h2>
             <ol id="result-list"></ol>
         </section>
-        <div class="modal"><div class="modalcontent"><p></p><span>&times;</span></div></div>
+        <div class="modal"><div class="modalcontent" aria-label="acknowledge" role="button"><p></p></div></div>
     </body>
     <script src="index.js"></script>
 </html>

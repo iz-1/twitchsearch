@@ -16,8 +16,6 @@ let currContent = '';
 let currSearchParams = {};
 
 let prevSearchParams;
-//let cursor = '';
-//let prevRequest;
 
 let imgw;// = 480;
 let imgh;// = 272;
@@ -76,13 +74,6 @@ function startForm(){
             }
 
             console.log('check src:' + p.attr('src') == null);
-
-            /*
-            if(p.attr('src') == '')
-               LoadTwitchPlayer(p.attr('vid'), t.attr('id'));
-            else
-                t.append(GetEmbedStr(p.attr('src') + p.attr('vid')));
-                */
         }
         else if(t.hasClass('fa-link')) {            
             let jObj = $(event.currentTarget);
@@ -93,8 +84,6 @@ function startForm(){
             let adding = t.hasClass('far');
             let id = t.attr('value');
             
-            //console.log(t);
-
             if(AddRemVideoIDtoFavorite(id, adding))
             {
                 // fas fa-star
@@ -117,7 +106,6 @@ function startForm(){
         if(searchVal == "")
             return;
 
-        //currSearch = $('#content-type :selected').val();
         currSearch = 'channels';
 
         currSearchParams = GetParams(currSearch); 
@@ -211,10 +199,6 @@ function startForm(){
     });
 }
 
-function FilterResultsByGame() {
-
-}
-
 function AddSearchItem(){
     if($('#checkbox-container input').length < MAX_ids && $('#searchresult-list :selected').val() != null) {
         AddSearchOption(
@@ -234,23 +218,11 @@ function ListGames() {
 
     let nRes = 20;
 
-    //currSearch = $('#content-type :selected').val();
     currSearch = 'games';
 
-    //const params = GetParams(currSearch); 
     currSearchParams = GetParams(currSearch);
 
     RequestRes(BuildQueryRequest(currSearch, currSearchParams, nRes), currSearchParams, ResponseFunction[currSearch]); ;
-    //ResponseFunction[currSearch](response, null);
-
-    /*
-    if(cursor != '' || (prevSearchParams != null && prevSearchParams.cursor != cursor))
-    {
-        prevSearchParams = params;
-        prevSearchParams['cursor'] = cursor;
-        cursor = '';
-        RequestRes(BuildQueryRequest(currSearch, prevSearchParams, nRes), ResponseFunction[currSearch]); 
-    }*/
 }
 
 function SearchButton() {
@@ -258,12 +230,8 @@ function SearchButton() {
         return;
 
     ClearResults();
-    //FindContentChange();
 
-    //currContent = $('#find-type :selected').val();
     currContent = $('input[name=content]:checked').val();
-
-    //console.log($('input:checkbox').length);
 
     $('section .results').addClass('hidden'); 
     currSearchParams = GetParams(currContent); 
@@ -297,16 +265,6 @@ function GetDaysStr(dat){
 
     return `${val} ${txt}${val>1?'s':''}`;
 }
-
-// handled in GetParams - store these criteria for filtering data after retrival
-/*
-function FindContentChange(){
-    switch($('#find-type :selected').val()){
-        case 'clips': RemoveCriteraForClipSearch(); break; // api: clips only allows 1 id {game or broadcaster}
-        case 'videos': break; 
-        case 'streams': break;
-    }
-} */
 
 function CopyToClipboard(jObj) {
     console.log(jObj); // @todo
@@ -362,16 +320,13 @@ function ShowModal(text){
 
 function PopulateDropdowns() {
     BuildNumResultsOptions();
-    //PopulateSelectOptions('#find-type', 'clips,videos,streams'.split(','));
     PopulateSelectOptions('#content-type', 'games,channels'.split(','));
-    //RequestRes('https://api.twitch.tv/helix/games/top', StoreTopGames); // find top games
     PopulateSelectOptions('#filter-date', 'all,day,week,month,year'.split(','));
     PopulateSelectOptions('#sort-type', 'time,trending,views'.split(','));
     PopulateDummySearchList();
 }
 
 function AddSearchOption(text, val, type) {
-    //if(!IsDuplicateOption(type, val))
     if($('input:checkbox').length == 0)
         $('#checkbox-container').append(`<label class='${type}' style=''>${text} <i class="fas fa-times"></i></label><input type='checkbox' value='${val}' data-type='${type}' class='searchcriteria'>`);
 }
@@ -633,6 +588,7 @@ function BuildQueryRequest(endpoint, params, maxResults=defaultMinResults){
 
     // replace token for mulitple games ids
     queryJoined = queryJoined.replace('!', '&game_id=');
+
     // replace token for mulitple user ids
     queryJoined = queryJoined.replace('.', '&user_id=');
 
@@ -654,17 +610,6 @@ async function RequestRes(req, param, fnt){
         throw new Error(response.statusText);
     })
     .then(responseJson => {
-        /*
-        if($('input:checkbox').length > 1)
-        {
-            let ids = responseJson.data.map(i => i.id);
-            console.log(ids);        
-            fetch(`https://api.twitch.tv/helix/videos?id=${ids.join('&id=')}`, {headers: {'Client-ID': clientID}})
-            .then(responselist =>{
-                console.log(responselist.text());
-            });            
-        }*/
-
         return responseJson;
     })
     .then(responseJson => fnt(responseJson, param))
@@ -674,8 +619,6 @@ async function RequestRes(req, param, fnt){
         console.log(err.message);
     })
 }
-
-
 
 function ContentMatchesUser(broadCasterID){
     //console.log(JSON.stringify(currSearchParams) + " " + broadCasterID);
@@ -752,32 +695,22 @@ function DisplayResultClips(response, params) { // used params
             matchesUser ) // videos
             {
                 let divID = 'iteminfo' + resultEntries.length; // used for twitch player
+                let aria = `${name}'s video`;
 
                 resultEntries.push(
-                    `<li vid='${item.id}' src='${srcUrl}' uname='${name}' type='${searchContent}' style="max-width:${imgw}px"><div class='iteminfo' id=${divID} style="height:${imgh}px; width:${imgw}px; background-image: url('${imgurl}')">\                    
+                    `<li vid='${item.id}' src='${srcUrl}' uname='${name}' type='${searchContent}' style="max-width:${imgw}px"><div aria-label="Embed Video" class='iteminfo' id=${divID} style="height:${imgh}px; width:${imgw}px; background-image: url('${imgurl}')">\                    
                     <p class='views' value='${item[viewsProp]}'>${item[viewsProp]} ${viewTitle}</p>\
                     <i class="fas fa-play fa-3x"></i>\
                     <p class='date' value='${item[dateProp]}'>${GetDaysStr(item[dateProp])}</p>\
                     </div>\                    
                     <div class='resultitem'>\                    
-                    <p class='title'><a href='${url}' target='_blank'>${item.title}</a></p><br>\
+                    <p class='title'><a href='${url}' target='_blank' alt='${aria}' aria-label='${aria}'>${item.title}</a></p><br>\
                     <p>${favoritelink}<i class='fas fa-link'></i></p><p class='username'>${name}</p><br>\
                     </div></li>`);
             }
     });
     $('#result-list').append(resultEntries.join(''));
     $('section').removeClass('hidden');
-
-    /*
-    let newParams = params;
-    console.log(JSON.stringify(newParams));
-    if(newParams['after'] != response.pagination.cursor)
-    {
-        newParams['after'] = response.pagination.cursor;
-        console.log(JSON.stringify(newParams));
-        RequestRes(BuildQueryRequest(currContent, newParams, 200), newParams, ResponseFunction[currContent]); 
-    }
-    */
 }
 
 function GetEmbedStr(src, bClip=false, w=imgw, h=imgh, bFullScreen=true, bScrolling=false, border=0){
@@ -829,7 +762,7 @@ function isValidLoginCredentials(){
     let p = $('#pass').val();
 
     if(l.length < minCredentialChars || p.length < minCredentialChars || !UserList.hasOwnProperty(l) || UserList[l] != p)
-        return 'Invalid Login/Password';    
+        return 'Invalid Login/Password ×';    
     user = l;
 }
 
