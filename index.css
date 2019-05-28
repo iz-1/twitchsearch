@@ -1,6 +1,7 @@
-/** { border: 1px solid gray; }*/
+/** { border: 1px solid gray; } */
 html, body {
     overflow-x: hidden;
+    overflow-y: overlay;
 }
 body {
     text-align: center;
@@ -9,29 +10,33 @@ body {
     margin: 0;
     border-radius: 2px;    
 }
-.game {
-    position: absolute;
+.game, .addterm {
     background-color: #19171C;
-    height: 200px;
-    padding: 2px 2px 0 2px;;
+    padding: 1vh 0;
     width: 30vw;
 }
-.game label {
-    color: #fff;
+.addterm {
+    background-color: #fff;
+}
+.left {
+    position: absolute;
 }
 .critera {
-    height: 200px;
+    height: 25vh;
     margin-left: 30vw;
     width: 74%;
     max-width: 2500px;
+    max-height: 250px;
     padding-left: 0.5vw;
 }
 fieldset {
     border-radius: 4px;
     height: 100px;
-    width: 65.5vw;
+    width: 62.5vw;
     overflow: visible;
     max-width: 1500px;
+    margin-left: 2vw;
+    margin-bottom: 2vh;
 }
 .mtitle {
     margin-left: auto;
@@ -40,7 +45,6 @@ fieldset {
 .title {
     overflow-wrap: break-word;
     font-weight: bold;
-    /*font-size: 1em;*/
     font-size: calc(12px + (20 - 12) * ((100vw - 360px) / (1560)));
 }
 .title a:link, a:visited {
@@ -51,7 +55,6 @@ fieldset {
     color: rgb(100, 65, 164);
 }
 .username {
-    /*font-size: 0.9em;*/
     font-size: calc(11px + (20 - 11) * ((100vw - 360px) / (1560)));
 }
 .sort {
@@ -70,10 +73,7 @@ form {
 .gladr {
     text-decoration: none;
 }
-.hidden {
-    display: none;
-}
-input {
+input, button {
     margin: 0.25em auto;
     text-align: center;    
     display: inline;
@@ -92,7 +92,6 @@ li {
     border-radius: 4px;
     margin-bottom: 1vh;
     vertical-align: top;
-    /* width: 480px; */
 }
 #numresults {
     grid-column: 2 / 3;
@@ -107,7 +106,7 @@ p {
     margin: 1px;
 }
 section {
-    margin: 0 auto;
+    /*margin: 0 auto;*/
 }
 select {
     display: inline-block;
@@ -121,20 +120,27 @@ select {
     padding: 0 8px 0 10px;
     min-height: 20px;
     max-height: 30px;
-    max-width: 100px;
+    max-width: 100px;    
 }
-input[type=button]{
+select:enabled, .fa-times {
+    cursor: pointer;
+}
+input[type=button], button{
     background-color: rgb(100, 65, 164);
     color: #fff;
     padding: 0 5px;
     height: 30px;
 }
-input[type=button]:hover:enabled {
+input[type=button]:hover:enabled, button:hover:enabled {
     background-color: #AC9ACE;
     transition: 200ms;
+    cursor: pointer;
 }
-input[type=checkbox] {
+input[type=checkbox], input[type=radio], .hidden {
     display: none;
+}
+button:disabled {
+    background-color: #999;
 }
 text {
     width: 50vw;
@@ -149,6 +155,7 @@ legend {
 hr {
     color: rgb(100, 65, 164);
     width: 100%;
+    padding-top: 1vh;
 }
 .critera {
     width: 100%;
@@ -164,17 +171,17 @@ image {
     float: left;
 }
 .channels {
-    background-color: red;
+    color: red;
 }
 .games {
-    background-color: blue;
+    color: blue;
 }
 .channels, .games {
     padding: 5px;
     border-radius: 4px;
     margin: 0 5px 20px;
-    color: #fff;
     max-width: 800px;
+    background-color: #fff;
 }
 h1 {
     text-align: top;    
@@ -182,7 +189,6 @@ h1 {
 nav {
     padding-top: 0.1em;
     margin-right: 3vw;
-    /* font-size: 1.0em; */
     font-size: calc(12px + (20 - 12) * ((100vw - 360px) / (1560)));
 }
 nav a:link, nav a:visited {
@@ -201,7 +207,7 @@ header {
     background-color: rgb(100, 65, 164);
     color: #fff;
     height: 4em;
-    max-height: 50px;
+    max-height: 55px;
 }
 header a {
     color: #fff;
@@ -254,7 +260,7 @@ i {
     margin: 0 2px;
 }
 ol {
-    padding: 0;
+    padding: 0 0.2em;
     margin: 0 0.2em;
     display: flex;
     flex-wrap: wrap;
@@ -279,12 +285,10 @@ ol {
 .content-list label {
     padding: 10px 5px;
 }
-input[type=radio] {
-    display: none;
-}
-.content-list .navitem:hover{
+.content-list .navitem:hover {
     padding-bottom: 10px;
-    border-bottom: 4px solid darkgray;
+    border-bottom: 4px solid darkgray;    
+    cursor: pointer;
 }
 .clist-active {
     padding-bottom: 10px;
@@ -296,10 +300,15 @@ div .vl {
     border-radius: 0;
     padding: 10px 0;
 }
+#search {
+    max-width: none;
+    margin-bottom: 1vh;
+}
 #searchresult-list {
+    margin-top: 2vh;
     margin-bottom: 0.25em;
     margin-left: 0;
-    max-width: none;
+    max-width: 200px;
 }
 .iteminfo {
     background-repeat: no-repeat;
@@ -315,10 +324,16 @@ div .vl {
     background-color: #000;
     background-color: rgba(0,0,0,0.8);
 }
-p.views, p.date{
+p.views, p.date {
     align-self: flex-end;
     padding: 2px;
     font-size: calc(12px + (20 - 12) * ((100vw - 360px) / (1560)));
+}
+p.views {
+    border-radius: 0px 0px 0px 4px;
+}
+p.date {
+    border-radius: 0px 0px 4px 0px;
 }
 .fa-play {
     align-self: center;
@@ -326,5 +341,8 @@ p.views, p.date{
 }
 .iteminfo:hover .fa-play {
     color: #fff;
+    transition: 200ms;
+}
+.colortrans {
     transition: 200ms;
 }

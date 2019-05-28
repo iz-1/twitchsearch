@@ -22,15 +22,23 @@
             </nav>
         </header>
         <form>            
-            <div class="game">
-                <select id="content-type" class="hidden"></select> <!--todo remove content-type dropdown -->
-                <input type="text" id="search" placeholder="Search Term" autofocus><br>
-                <input type="button" id="ChannelBtn" value="Channels">
-                <!--<input type="text" id="search" value="" pattern=".{2,}" title="3 characters min"> -->
-                <input type="button" id="GamesBtn" value="Games">
-                <hr>
-                <select id="searchresult-list"></select><br>
-                <input type="button" id="addBtn" value="Add">
+            <div class="left">
+                <div class="game">
+                    <select id="content-type" class="hidden"></select> <!--todo remove content-type dropdown -->
+                    <input type="text" id="search" placeholder="Search for Game or User" autofocus><br>
+                    <!-- <input type="button" id="GamesBtn" value="Find Games"> -->
+                    <button id="GamesBtn">Find Games<i class="fas fa-arrow-circle-down"></i></button>
+                    <!-- <input type="button" id="ChannelBtn" value="Find Users"> -->
+                    <button id="ChannelBtn">Find Users<i class="fas fa-arrow-circle-down"></i></button>
+                    <!--<input type="text" id="search" value="" pattern=".{2,}" title="3 characters min"> -->
+                    
+                    <!--<hr>-->
+                </div>
+                <div class="addterm">
+                    <select id="searchresult-list"></select>
+                    <!-- <input type="button" id="addBtn" value="Add ->"> -->
+                    <button id="addBtn">Add<i class="fas fa-arrow-circle-right"></i></button>
+                </div>
             </div>
             <div class="critera">
                 <ul class="content-list">
@@ -41,7 +49,10 @@
                         <li><label class="navitem"><input type="radio" name="content" value="streams">Streams</label></li>
                         <li><label for="sort-type">Sort</label><select id="sort-type"></select></li>
                 </ul>
-                <fieldset><legend><input type="button" id="SearchBtn" value="Search"></legend>
+                <fieldset><legend>
+                    <!--<input type="button" id="SearchBtn" value="Search">-->
+                    <button id="SearchBtn">Search <i class="fas fa-search"></i></button>
+                </legend>
                 <section id='checkbox-container'></section>
                 </fieldset>
                 <div class="sort">
