@@ -540,7 +540,6 @@ function BuildQueryRequest(endpoint, params, maxResults=defaultMinResults){
 }
 
 function RequestRes(req, fnt){
-
     fetch(req, {
         headers: {'Client-ID': clientID}
     })
@@ -550,11 +549,19 @@ function RequestRes(req, fnt){
         throw new Error(response.statusText);
     })
     .then(responseJson => {
-        fnt(responseJson);
+        if(responseJson.hasOwnProperty('data') && responseJson.data.length == 0)
+            SetSearchResultsBanner(false);
+        else
+            fnt(responseJson);
     })
     .catch(err => {
         console.log(err.message);
     });
+}
+
+function SetSearchResultsBanner(bHasResults=true){
+    $('section').removeClass('hidden');
+    $('.resultheader').text(`${bHasResults ? 'Search': 'No'} Results`);
 }
 
 function ContentPropertyFind(id, property, token) {
@@ -624,6 +631,7 @@ function DisplayResultClips(response) {
             }
     });
     $('#result-list').append(resultEntries.join(''));
+    SetSearchResultsBanner(true);
     $('section').removeClass('hidden');
 }
 
