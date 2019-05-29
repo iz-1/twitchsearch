@@ -15,8 +15,6 @@ let currSearch = '';
 let currContent = '';
 let currSearchParams = {};
 
-let prevSearchParams;
-
 let imgw;// = 480;
 let imgh;// = 272;
 let searchStep = 0;
@@ -25,7 +23,7 @@ const ResponseFunction = {
     games: ParseGameListSearch
     ,clips: DisplayResultClips
     ,videos: DisplayResultClips
-    ,streams: DisplayResultClips // DisplayResultStreams
+    ,streams: DisplayResultClips
     ,channels: ParseChannelSearch
 };
 
@@ -53,52 +51,49 @@ function startForm(){
     });
     
     $('#result-list').on('click', 'i', 'div', function(event){        
-        let t = $(event.currentTarget);
-        if(t.hasClass('fa-play')) {
-            t = t.parent(); // get div
-            let p = t.parent();
-            t.empty();
+        let targetObject = $(event.currentTarget);
+        if(targetObject.hasClass('fa-play')) {
+            targetObject = targetObject.parent(); // get div
+            let parentDiv = targetObject.parent();
+            targetObject.empty();
 
-
-            switch(p.attr('type'))
+            switch(parentDiv.attr('type'))
             {
                 case 'clips':
-                    t.append(GetEmbedStr(p.attr('src') + p.attr('vid')));
+                    targetObject.append(GetEmbedStr(parentDiv.attr('src') + parentDiv.attr('vid')));
                 break;
                 case 'videos':
-                    LoadTwitchPlayer(p.attr('vid'), t.attr('id'));   
+                    LoadTwitchPlayer(parentDiv.attr('vid'), targetObject.attr('id'));   
                 break;
                 case 'streams':
-                    LoadTwitchPlayer(p.attr('uname'), t.attr('id'), false);   
+                    LoadTwitchPlayer(parentDiv.attr('uname'), targetObject.attr('id'), false);   
                 break;
             }
-
-            console.log('check src:' + p.attr('src') == null);
         }
-        else if(t.hasClass('fa-link')) {            
+        else if(targetObject.hasClass('fa-link')) {            
             let jObj = $(event.currentTarget);
             CopyToClipboard(jObj);
         }
         else {
             // far
-            let adding = t.hasClass('far');
-            let id = t.attr('value');
+            let adding = targetObject.hasClass('far');
+            let id = targetObject.attr('value');
             
             if(AddRemVideoIDtoFavorite(id, adding))
             {
                 // fas fa-star
-                t.toggleClass('far');
-                t.toggleClass('fas');
+                targetObject.toggleClass('far');
+                targetObject.toggleClass('fas');
             }
         }
     });
 
-    $('#GamesBtn').on('click', function(event){
+    $('#gamesBtn').on('click', function(event){
         event.preventDefault();
         ListGames();
     });
 
-    $('#ChannelBtn').on('click', function(event){
+    $('#channelBtn').on('click', function(event){
         event.preventDefault();
         let nRes = 20;
 
@@ -109,7 +104,7 @@ function startForm(){
         currSearch = 'channels';
 
         currSearchParams = GetParams(currSearch); 
-        RequestRes(BuildQueryRequest(currSearch, currSearchParams, nRes), currSearchParams, ResponseFunction[currSearch]); 
+        RequestRes(BuildQueryRequest(currSearch, currSearchParams, nRes), ResponseFunction[currSearch]); 
     });
 
     $('#addBtn').on('click', function(event){
@@ -117,14 +112,14 @@ function startForm(){
         AddSearchItem();
     });
 
-    $('#SearchBtn').on('click', function(event){
+    $('#searchBtn').on('click', function(event){
         event.preventDefault();   
         SearchButton();
     });
 
     $('#checkbox-container').on('click', 'label', function(event){
-        let t = $(event.currentTarget);
-        if(t.hasClass('games') || t.hasClass('channels')) {
+        let targetLabel = $(event.currentTarget);
+        if(targetLabel.hasClass('games') || targetLabel.hasClass('channels')) {
             $(event.currentTarget).next('input').remove();
             event.currentTarget.remove();
 
@@ -222,7 +217,7 @@ function ListGames() {
 
     currSearchParams = GetParams(currSearch);
 
-    RequestRes(BuildQueryRequest(currSearch, currSearchParams, nRes), currSearchParams, ResponseFunction[currSearch]); ;
+    RequestRes(BuildQueryRequest(currSearch, currSearchParams, nRes), ResponseFunction[currSearch]); ;
 }
 
 function SearchButton() {
@@ -236,7 +231,7 @@ function SearchButton() {
     $('section .results').addClass('hidden'); 
     currSearchParams = GetParams(currContent); 
 
-    RequestRes(BuildQueryRequest(currContent, currSearchParams, 200), currSearchParams, ResponseFunction[currContent]); 
+    RequestRes(BuildQueryRequest(currContent, currSearchParams, 200), ResponseFunction[currContent]); 
 
     $('#filter-date').val('all');    
 }
@@ -251,31 +246,19 @@ function GetDaysStr(dat){
     let months = days / 30.4167;
     let years = months / 12;
 
-    let val;
+    let numericalVal;
     let txt;
 
-    if(years > 1) {val=years; txt='year';}
-    else if(months > 1) {val=months; txt='month';}
-    else if(days > 1) {val=days; txt='day';}
-    else if(hrs > 1) {val=hrs; txt='hour';}
-    else if(mins > 1) {val=mins; txt='min';}
-    else if(secs > 1) {val=secs; txt='sec';}
+    if(years > 1) {numericalVal=years; txt='year';}
+    else if(months > 1) {numericalVal=months; txt='month';}
+    else if(days > 1) {numericalVal=days; txt='day';}
+    else if(hrs > 1) {numericalVal=hrs; txt='hour';}
+    else if(mins > 1) {numericalVal=mins; txt='min';}
+    else if(secs > 1) {numericalVal=secs; txt='sec';}
 
-    val = val.toFixed(0);
+    numericalVal = numericalVal.toFixed(0);
 
-    return `${val} ${txt}${val>1?'s':''}`;
-}
-
-function CopyToClipboard(jObj) {
-    console.log(jObj); // @todo
-    /*
-    let link = $(event.currentTarget).find('a');
-    console.log(link);
-    //console.log(domObj.attr('href')); 
-    domObj.focus();
-    domObj.setSelectionRange(0, jObj.val().length);
-    document.execCommand('copy');
-    */    
+    return `${numericalVal} ${txt}${ numericalVal>1 ? 's' : '' }`;
 }
 
 function isContentFavorited(id, type=currContent) {
@@ -289,16 +272,12 @@ function AddRemVideoIDtoFavorite(id, addToList=true) {
     if(addToList) {
         if(!contained) {
             UserFavorites[user][Fave[currContent]].push(id);
-            console.log(`Add ${user}: ${currContent}: ${id}`);
-            console.log(UserFavorites);
             return true;
         }
         return false;
     } else {
         if(contained){
             UserFavorites[user][Fave[currContent]] = UserFavorites[user][Fave[currContent]].filter(e => {return e != id});
-            console.log(`Rem ${user}: ${currContent}: ${id}`);
-            console.log(UserFavorites);
             return true;            
         }
         return false;
@@ -326,19 +305,18 @@ function PopulateDropdowns() {
     PopulateDummySearchList();
 }
 
-function AddSearchOption(text, val, type) {
-    if($('input:checkbox').length == 0)
-        $('#checkbox-container').append(`<label class='${type}' style=''>${text} <i class="fas fa-times"></i></label><input type='checkbox' value='${val}' data-type='${type}' class='searchcriteria'>`);
+function AddSearchOption(text, value, type) {
+    if($('input:checkbox').length > 0)
+        $('#checkbox-container').empty();
+    $('#checkbox-container').append(`<label class='${type}' style=''>${text} <i class="fas fa-times"></i></label><input type='checkbox' value='${value}' data-type='${type}' class='searchcriteria'>`);
 }
 
-function IsDuplicateOption(type, val){
+function IsDuplicateOption(type, value){
     let chkboxarr = $('input:checkbox');
     for(let i=0; i<chkboxarr.length; ++i)
     {
-        let o = $(`input:checkbox:eq(${i})`);
-        let t = o.attr('data-type');
-        let v = o.val();        
-        if((type == t) && (val == v))
+        let checkbox = $(`input:checkbox:eq(${i})`);
+        if(type == checkbox.attr('data-type') && value == checkbox.val())
             return true;        
     }
     return false;
@@ -348,30 +326,22 @@ function PopulateDummySearchList() {
     PopulateSelectOptions('#searchresult-list', [''], ['Search Results']);     
 }
 
-function ParseChannelSearch(response, params){
-    //console.log(response);
-    let names = [];
-    let ids = [];
-    response.channels.forEach(function(e){
-        names.push(e.display_name);
-        ids.push(e._id);
-    });
-    PopulateSelectOptions('#searchresult-list', ids, names); 
-    if(searchStep == 0) {
-        IndicateNextStep();
-        DisableEnableUI();
-    }
+function ParseChannelSearch(response){
+    BuildDropDownOptions(response.channels, 'display_name');
 }
 
-function ParseGameListSearch(response, params) {
-    //console.log(response);
-    let names = [];
+function ParseGameListSearch(response) {
+    BuildDropDownOptions(response.games, 'name');
+}
+
+function BuildDropDownOptions(datalist, nameProperty) {
     let ids = [];
-    response.games.forEach(function(e){
-        names.push(e.name);
+    let names = [];    
+    datalist.forEach(function(e){
         ids.push(e._id);
+        names.push(e[nameProperty]);        
     });
-    PopulateSelectOptions('#searchresult-list', ids, names);
+    PopulateSelectOptions('#searchresult-list', ids, names); 
     if(searchStep == 0) {
         IndicateNextStep();
         DisableEnableUI();
@@ -382,11 +352,10 @@ function DisableEnableUI(){
     switch(searchStep){
         case 0:
             $('#addBtn').prop('disabled', true);   
-            $('#SearchBtn').prop('disabled', true);        
+            $('#searchBtn').prop('disabled', true);        
             $('#searchresult-list').prop('disabled', true);
             $('#sort-type').prop('disabled', true);
             $('#filter-date').prop('disabled', true);
-            //$('.navitem').prop('disabled', true);
             $('input[name=content]').prop('disabled', true);
         break;
         case 1:
@@ -394,10 +363,9 @@ function DisableEnableUI(){
             $('#searchresult-list').prop('disabled', false);
         break;
         case 2:
-            $('#SearchBtn').prop('disabled', false);
+            $('#searchBtn').prop('disabled', false);
             $('#sort-type').prop('disabled', false);
             $('#filter-date').prop('disabled', false); 
-            //$('.navitem').prop('disabled', false);  
             $('input[name=content]').prop('disabled', false);
         break;
     }
@@ -405,7 +373,7 @@ function DisableEnableUI(){
 
 function IndicateNextStep(bReset){
     let focuscolor = '#19171C';
-    let unfocuscolor = '#fff';//'#444';
+    let unfocuscolor = '#fff';
 
     if(bReset) {
         searchStep = 1;
@@ -414,10 +382,9 @@ function IndicateNextStep(bReset){
         $('.game').css('background-color', focuscolor);
         $('.critera label').css('color', focuscolor); 
         $('.vl').css('border-color', focuscolor);
-        $('#SearchBtn').prop('disabled', true);
+        $('#searchBtn').prop('disabled', true);
         $('#sort-type').prop('disabled', true);
         $('#filter-date').prop('disabled', true);        
-        //$('.navitem').prop('disabled', true);
         $('input[name=content]').prop('disabled', true);
         return;
     }
@@ -440,11 +407,9 @@ function IndicateNextStep(bReset){
             $('.channels').css('color', 'red');
         break;
     }
-    
 }
 
 function PopulateSelectOptions(id, valueList, textList = valueList) {
-    //console.log(valueList);
     $(id).empty();
     $(id).append(valueList.map( (e,i) => {
         return `<option value='${e}'>${textList[i]}</option>`;
@@ -460,23 +425,7 @@ function BuildNumResultsOptions() {
     PopulateSelectOptions('#number-results', strArray);
 }
 
-// for clip searches we want results by games then we will filter the results
-function RemoveCriteraForClipSearch(){
-    let bFirst = false;
-    $('input:checkbox').each(function(){
-        let isGame = $(this).attr('data-type') == 'games';
-        if(!bFirst && isGame)
-            bFirst = true;
-        else if(isGame)
-        {
-            $(this).prev('label').remove();
-            $(this).remove();
-        }
-    });
-}
-
 function ParseSearchCritera(){
-    //console.log('ParseSearchCritera');
     let result = {game_id: new Set(), user_id: new Set()};
     
     $('input:checkbox').each(function(){
@@ -496,12 +445,10 @@ function ParseSearchCritera(){
 }
 
 function GetParams(selectedType){
-    let nResults = 100; // $('#number-results :selected').val(); todo
+    let nResults = 100; 
 
     let params = {
-        //game_id: gameid,
         first: nResults
-        //,after: ''
     };
 
     let params2;
@@ -529,10 +476,10 @@ function GetParams(selectedType){
                 GameIdParams = {game_id: SearchCriteria.game_id[0]}
 
             if(SearchCriteria.user_id.length > 0)
-                UserIdParams = {user_id: SearchCriteria.user_id[0]} 
+                //UserIdParams = {user_id: SearchCriteria.user_id[0]} 
+                UserIdParams = {broadcaster_id: SearchCriteria.user_id[0]} 
 
             if(UserIdParams.hasOwnProperty('user_id') && GameIdParams.hasOwnProperty('game_id'))
-                //UserIdParams = {};
                 GameIdParams = {};
        
         break;
@@ -563,7 +510,6 @@ function GetParams(selectedType){
             return { 
                 query: searchVal //
                 ,type: 'suggest'
-                //,limit: 100
             }        
         break;                               
     }
@@ -584,77 +530,48 @@ function BuildQueryRequest(endpoint, params, maxResults=defaultMinResults){
 
     let queryJoined = queryStr.join('&');
 
-    console.log(queryJoined);
-
     // replace token for mulitple games ids
     queryJoined = queryJoined.replace('!', '&game_id=');
 
     // replace token for mulitple user ids
     queryJoined = queryJoined.replace('.', '&user_id=');
 
-    //console.log(queryJoined);
-
     return url + `/${endpoint}` + '?' + queryJoined;
 }
 
-async function RequestRes(req, param, fnt){
-    console.log(req);
-    //prevRequest = req;
+function RequestRes(req, fnt){
 
     fetch(req, {
         headers: {'Client-ID': clientID}
     })
     .then(response => {
-        if(response.ok)
+        if(response.ok && response.status == 200)
             return response.json();
         throw new Error(response.statusText);
     })
     .then(responseJson => {
-        return responseJson;
+        fnt(responseJson);
     })
-    .then(responseJson => fnt(responseJson, param))
     .catch(err => {
-        //console.log(response);
-        //console.log(responseJson);
         console.log(err.message);
-    })
+    });
 }
 
-function ContentMatchesUser(broadCasterID){
-    //console.log(JSON.stringify(currSearchParams) + " " + broadCasterID);
+function ContentPropertyFind(id, property, token) {
+    if(!currSearchParams.hasOwnProperty(property))
+        return true;    
 
-    if(!currSearchParams.hasOwnProperty('user_id'))
-        return true;
-
-    let ids = currSearchParams.user_id.split('.');
-    return ids.filter(e => {return e == broadCasterID}).length > 0;
-}
-
-function ContentMatchesGame(gameID){
-    //console.log(JSON.stringify(currSearchParams) + " " + gameID);
-
-    if(!currSearchParams.hasOwnProperty('game_id'))
-        return true;
-
-    let ids = currSearchParams.game_id.split('!');
-    return ids.filter(e => {return e == gameID}).length > 0;
+        let ids = currSearchParams[property].split(token);
+        return ids.filter(e => {return e == id}).length > 0;
 }
 
 function ProperCase(str) {
     return str.replace(/\w\S*/g, function(t) { return t.charAt(0).toUpperCase() + t.substr(1).toLowerCase(); });
 }
 
-function DisplayResultClips(response, params) { // used params
-    console.log(response);
-
+function DisplayResultClips(response) { 
     let resultEntries = [];
-    //let playerName = "SamplePlayerDivID";
-    //let table = {};
-
-    //let searchContent = $('#find-type :selected').val();
     let searchContent = $('input[name=content]:checked').val();
-
-    //console.log(JSON.stringify(currSearchParams));
 
     response.data.forEach(function(item, i){
 
@@ -662,9 +579,7 @@ function DisplayResultClips(response, params) { // used params
         let url = (searchContent == 'streams') ? 'www.twitch.tv/' + name :  item.url;
         let favoritelink = isLoggedIn() ? `<i class='${ isContentFavorited(item.id) ? 'fas' : 'far'} fa-star' value='${item.id}'></i>` : '';
         
-        let imgurl = item.thumbnail_url.replace('%{width}', '{width}').replace('%{height}', '{height}'); // todo regex/replace('%{') for all
-        //imgurl = imgurl.replace('{width}', imgw).replace('{height}', imgh);
-        
+        let imgurl = item.thumbnail_url.replace('%{width}', '{width}').replace('%{height}', '{height}'); // todo regex/replace('%{') for all        
         imgurl = imgurl.replace('{width}', 480).replace('{height}', 272); // -- req for thumb
 
         if(imgurl == '')   
@@ -672,8 +587,8 @@ function DisplayResultClips(response, params) { // used params
 
         //clips:    no user_id
         //videos:   no broadcaster_id or game_id            
-        let matchesUser = ContentMatchesUser( item.hasOwnProperty('user_id') ? item.user_id : item.broadcaster_id);
-        let matchesGame = item.hasOwnProperty('game_id') ? ContentMatchesGame(item.game_id) : false;
+        let matchesUser = ContentPropertyFind( item.hasOwnProperty('user_id') ? item.user_id : item.broadcaster_id, 'user_id', '.');
+        let matchesGame = item.hasOwnProperty('game_id') ? ContentPropertyFind(item.game_id, 'game_id', '!') : false;
 
         // streams has no view_count/created_at
         let viewsProp = 'view_count';
@@ -688,8 +603,7 @@ function DisplayResultClips(response, params) { // used params
         let dateProp = item.hasOwnProperty('created_at') ? 'created_at' : 'started_at';
         let dateTitle = ProperCase(dateProp.replace('_', ' '));
 
-        //console.log('mode: ' + searchContent);
-        let srcUrl = (searchContent == 'clips') ? 'https://clips.twitch.tv/embed?clip=': '';//'https://player.twitch.tv/?video=';
+        let srcUrl = (searchContent == 'clips') ? 'https://clips.twitch.tv/embed?clip=': '';
 
         if( (searchContent != 'videos' && matchesUser && matchesGame ) ||  // streams/clips
             matchesUser ) // videos
@@ -714,7 +628,6 @@ function DisplayResultClips(response, params) { // used params
 }
 
 function GetEmbedStr(src, bClip=false, w=imgw, h=imgh, bFullScreen=true, bScrolling=false, border=0){
-    console.log('called GetEmbedStr');
     return `<iframe
     src="${src}&autoplay=false"
     height="${h}"
@@ -725,8 +638,7 @@ function GetEmbedStr(src, bClip=false, w=imgw, h=imgh, bFullScreen=true, bScroll
     </iframe>`;
 }
 
-function LoadTwitchPlayer(srcID, divId, bIsVideo=true) {
-    console.log('called LoadTwitchPlayer, is video?' + bIsVideo);
+function LoadTwitchPlayer(srcID, divId, bIsVideo=true) {    
     let embed;
 
     if(bIsVideo) {
@@ -757,25 +669,24 @@ function LoadTwitchPlayer(srcID, divId, bIsVideo=true) {
 }
 
 function isValidLoginCredentials(){
-    //console.log($('#login').length + " " + $('#pass').length);
-    let l = $('#login').val();
-    let p = $('#pass').val();
+    let login = $('#login').val();
+    let password = $('#pass').val();
 
-    if(l.length < minCredentialChars || p.length < minCredentialChars || !UserList.hasOwnProperty(l) || UserList[l] != p)
+    if(login.length < minCredentialChars || password.length < minCredentialChars || !UserList.hasOwnProperty(login) || UserList[login] != password)
         return 'Invalid Login/Password ×';    
-    user = l;
+    user = login;
 }
 
 function isValidRegCredentials(){
-    let l = $('#login').val();
-    let p = $('#pass').val();
+    let login = $('#login').val();
+    let password = $('#pass').val();
 
-    if(l.length < minCredentialChars || p.length < minCredentialChars || UserList.hasOwnProperty(l))
+    if(login.length < minCredentialChars || password.length < minCredentialChars || UserList.hasOwnProperty(login))
         return 'Invalid Registration - login/password must be atleast ${minCredentialChars} characters';
     
-    UserList[l] = p;
-    UserFavorites[l] = [[], [], []];
-    user = l;
+    UserList[login] = password;
+    UserFavorites[login] = [[], [], []];
+    user = login;
 }
 
 function isLoggedIn(){
@@ -784,23 +695,22 @@ function isLoggedIn(){
 
 function SetupLinkClickEvents() {
     $('#loginLink').on('click', function(){
-        let res = isValidLoginCredentials();
-        if(res == null)
+        let result = isValidLoginCredentials();
+        if(result == null)
             UpdateNavPanel('login');
         else
-            OutputError(res);
+            OutputError(result);
     });
 
     $('#regLink').on('click', function(){
-        let res = isValidRegCredentials();
-        if(res == null)
+        let result = isValidRegCredentials();
+        if(result == null)
             UpdateNavPanel('login');
         else
-            OutputError(res);            
+            OutputError(result);            
     });
 
     $('#logoutLink').on('click', function(){
-        console.log(loginState);
         if(loginState == 'login')
             UpdateNavPanel('logout');
     });    
@@ -817,7 +727,7 @@ function SetupLinkClickEvents() {
 }
 
 function FavoriteItemString(item) {
-    return `<li><p value='${item}'></p><p><i class='fas fa-star'></i> Clip <a href='https://clips.twitch.tv/${item}' target='_blank'>https://clips.twitch.tv/${item}</a></p></li>`;
+    return `<li><p><i class='fas fa-star' value='${item}'></i> Clip <a href='https://clips.twitch.tv/${item}' target='_blank'>https://clips.twitch.tv/${item}</a></p></li>`;
 }
 
 function ShowFavorites(){
@@ -840,23 +750,20 @@ function ShowFavorites(){
 function RemoveUser(id) {
     delete UserList[id];
     delete UserFavorites[id];
-    console.log(UserList);
-    console.log(UserFavorites);
 }
 
 function OutputError(err) {
-    console.log(err);
     ShowModal(err);
 }
 
 function HideShowNavElementbyId(id, replaceStr=''){
-    let e = $(`#${id}`);
+    let element = $(`#${id}`);
     if(replaceStr == '') {
-        e.text('');
-        e.addClass('hidden');
+        element.text('');
+        element.addClass('hidden');
     }else {
-        e.text(replaceStr);
-        e.removeClass('hidden');
+        element.text(replaceStr);
+        element.removeClass('hidden');
     }
 }
 
@@ -896,10 +803,6 @@ function UpdateNavPanel(state){
 
 function ClearResults() {
     $('#result-list').empty();
-}
-
-function DisplayResult(response){
-    console.log(response); 
 }
 
 $(startForm);

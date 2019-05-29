@@ -24,7 +24,23 @@ Allows users to find content (clips/streams and video archives) from Twitch.
 
 Users can also create an account to keep track of favorites.
 
+## How to create an account?
+1. Enter a username and password in the text fields and click the "Register" link.
+
+2. Enter the login/password created and click the "Login" link.
+
+## How to use an account?
+1. After logging in, search items can be favorited/unfavorited by clicking on the star icon next to the streamer name.
+
+2. Clicking the "Favorites" link will display the current favorited items.
+
 ## How to use?
-If people like your project they’ll want to learn how they can use it. To do so include step by step guide to use your project.
+1. Enter a game or channel/streamer into the search bar and click "Find Games" to find games or "Find Users" to find channels/streamers.
+
+2. The results will populate the dropdown list, after selecting an option click "Add" to set the search critera.
+
+3. Click the "Search" button to find content matching the game/user.
+
+4. Clicking the play icon on a search item will embed the Twitch video player, and ability to play the content.
 
 MIT © [iz-1]()
