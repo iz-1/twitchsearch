@@ -386,6 +386,7 @@ function IndicateNextStep(bReset){
         $('#sort-type').prop('disabled', true);
         $('#filter-date').prop('disabled', true);        
         $('input[name=content]').prop('disabled', true);
+        $('#addBtn p').text('Add'); //
         return;
     }
 
@@ -405,6 +406,7 @@ function IndicateNextStep(bReset){
             $('.vl').css('border-color', unfocuscolor);
             $('.games').css('color', 'blue');
             $('.channels').css('color', 'red');
+            $('#addBtn p').text('Replace'); //
         break;
     }
 }
@@ -555,7 +557,8 @@ function RequestRes(req, fnt){
             fnt(responseJson);
     })
     .catch(err => {
-        console.log(err.message);
+        //console.log(err.message);
+        console.log('error: ' + err.message);
     });
 }
 
@@ -585,12 +588,11 @@ function DisplayResultClips(response) {
         let name = item.hasOwnProperty('broadcaster_name') ? item.broadcaster_name : item.user_name;
         let url = (searchContent == 'streams') ? 'www.twitch.tv/' + name :  item.url;
         let favoritelink = isLoggedIn() ? `<i class='${ isContentFavorited(item.id) ? 'fas' : 'far'} fa-star' value='${item.id}'></i>` : '';
-        
+
         let imgurl = item.thumbnail_url.replace('%{width}', '{width}').replace('%{height}', '{height}'); // todo regex/replace('%{') for all        
         imgurl = imgurl.replace('{width}', 480).replace('{height}', 272); // -- req for thumb
 
-        if(imgurl == '')   
-            imgurl = 'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'; // default blank img
+        const defaultImgUrl = 'https://vod-secure.twitch.tv/_404/404_processing_320x180.png';
 
         //clips:    no user_id
         //videos:   no broadcaster_id or game_id            
@@ -619,7 +621,7 @@ function DisplayResultClips(response) {
                 let aria = `${name}'s video`;
 
                 resultEntries.push(
-                    `<li vid='${item.id}' src='${srcUrl}' uname='${name}' type='${searchContent}' style="max-width:${imgw}px"><div aria-label="Embed Video" class='iteminfo' id=${divID} style="height:${imgh}px; width:${imgw}px; background-image: url('${imgurl}')">\                    
+                    `<li vid='${item.id}' src='${srcUrl}' uname='${name}' type='${searchContent}' style="max-width:${imgw}px"><div aria-label="Embed Video" class='iteminfo' id=${divID} style="height:${imgh}px; width:${imgw}px; background-image: url('${imgurl}'), url('${defaultImgUrl}')">\                    
                     <p class='views' value='${item[viewsProp]}'>${item[viewsProp]} ${viewTitle}</p>\
                     <i class="fas fa-play fa-3x"></i>\
                     <p class='date' value='${item[dateProp]}'>${GetDaysStr(item[dateProp])}</p>\
@@ -681,7 +683,7 @@ function isValidLoginCredentials(){
     let password = $('#pass').val();
 
     if(login.length < minCredentialChars || password.length < minCredentialChars || !UserList.hasOwnProperty(login) || UserList[login] != password)
-        return 'Invalid Login/Password ×';    
+        return 'Invalid Login/Password';    
     user = login;
 }
 
@@ -690,7 +692,7 @@ function isValidRegCredentials(){
     let password = $('#pass').val();
 
     if(login.length < minCredentialChars || password.length < minCredentialChars || UserList.hasOwnProperty(login))
-        return 'Invalid Registration - login/password must be atleast ${minCredentialChars} characters';
+        return `Invalid Registration - login/password must be atleast ${minCredentialChars} characters`;
     
     UserList[login] = password;
     UserFavorites[login] = [[], [], []];

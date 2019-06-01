@@ -16,10 +16,10 @@
                 <h2>Twitch Content Search</h2>
             </div>
             <nav>
-                <a href="#" id="faveLink" class="hidden" aria-label="Goto Favorites">Favorites</a> <a href="#" id="logoutLink" class="hidden" aria-label="Log out">Logout</a> 
+                <a href="#" id="faveLink" class="hidden" aria-label="Goto Favorites">Favorites</a>  <a href="#" id="logoutLink" class="hidden" aria-label="Log out">Logout</a>  
                 <a href="#" id="deleteLink" class="hidden" aria-label="Delete account">Delete Account</a>
-                <a href="#" id="loginLink" aria-label="Log in">Login</a><a href="#" id="regLink" aria-label="Register account">Register</a><br>
-                <input type="text" id="login" class="accountInput" placeholder='username' ><input type="password" id="pass" class="accountInput">
+                <a href="#" id="loginLink" aria-label="Log in">Login</a>  <a href="#" id="regLink" aria-label="Register account">Register</a><br>
+                <input type="text" id="login" class="accountInput" placeholder='username'><input type="password" id="pass" class="accountInput">
             </nav>
         </header>
         <form>            
@@ -32,7 +32,7 @@
                 </div>
                 <div class="addterm">
                     <select id="searchresult-list"></select>
-                    <button id="addBtn" aria-label="Add Selected Item">Add<i class="fas fa-arrow-circle-right"></i></button>
+                    <button id="addBtn" aria-label="Add Selected Item"><p>Add</p><i class="fas fa-arrow-circle-right"></i></button>
                 </div>
             </div>
             <div class="critera">
@@ -58,7 +58,9 @@
             <h2 class="resultheader">Search Results</h2>
             <ol id="result-list"></ol>
         </section>
-        <div class="modal"><div class="modalcontent" aria-label="acknowledge" role="button"><p></p></div></div>
+        <div class="modal">
+            <div class="modalcontent" aria-label="acknowledge" role="button"><i class="fas fa-times modalx"></i><br><p></p></div>
+        </div>
     </body>
     <script src="index.js"></script>
 </html>

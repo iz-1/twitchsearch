@@ -187,6 +187,7 @@ nav {
     padding-top: 0.1em;
     margin-right: 3vw;
     font-size: calc(12px + (20 - 12) * ((100vw - 360px) / (1560)));
+    color: #000;
 }
 nav a:link, nav a:visited {
     color: #fff;    
@@ -234,8 +235,16 @@ header a {
     margin-top: 10vh;
     height: auto;
     width: 40%;
-    padding: 20px;
+    padding: 5px 20px 20px 20px;
     border-radius: 8px;    
+    cursor: pointer;
+}
+.modalcontent p {
+    text-align: center;
+}
+.modalx {
+    text-align: right;
+    width: 100%;
 }
 div p {
     display: inline-block;
