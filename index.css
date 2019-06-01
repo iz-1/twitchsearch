@@ -237,7 +237,6 @@ header a {
     width: 40%;
     padding: 5px 20px 20px 20px;
     border-radius: 8px;    
-    cursor: pointer;
 }
 .modalcontent p {
     text-align: center;
@@ -245,6 +244,7 @@ header a {
 .modalx {
     text-align: right;
     width: 100%;
+    cursor: pointer;
 }
 div p {
     display: inline-block;

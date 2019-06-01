@@ -46,7 +46,7 @@ function startForm(){
     PopulateDropdowns();
     SetupLinkClickEvents();
 
-    $('.modalcontent').on('click', function(){
+    $('.modalcontent').on('click', 'i', function(){
         $('.modal').css('display', 'none');
     });
     
